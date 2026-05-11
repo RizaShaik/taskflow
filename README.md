@@ -4,38 +4,38 @@ A full-stack task management application built with Flask, PostgreSQL, WebSocket
 
 TaskFlow enables users to create, manage, update, and track tasks in real time with live dashboard updates and analytics.
 
-🚀 Features
-User Authentication (Register / Login / Logout)
-Secure session-based authentication
-Task CRUD operations
-Real-time task updates using WebSockets
-PostgreSQL database integration
-Analytics dashboard powered by Pandas + NumPy
-Responsive dark-themed UI
-RESTful API architecture
-Input validation and error handling
-Clean service-layer architecture
-🛠️ Tech Stack
-Backend
-Python
-Flask
-Flask-SQLAlchemy
-Flask-SocketIO
-PostgreSQL
-SQLAlchemy
-Frontend
-HTML
-CSS
-JavaScript
-Socket.IO Client
-Data & Analytics
-Pandas
-NumPy
-Other Tools
-Eventlet
-python-dotenv
-psycopg2
-📂 Project Structure
+🚀 Features<br>
+User Authentication (Register / Login / Logout) <br>
+Secure session-based authentication<br>
+Task CRUD operations<br>
+Real-time task updates using WebSockets<br>
+PostgreSQL database integration<br>
+Analytics dashboard powered by Pandas + NumPy<br>
+Responsive dark-themed UI<br>
+RESTful API architecture<br>
+Input validation and error handling<br>
+Clean service-layer architecture<br>
+🛠️ Tech Stack<br>
+Backend<br>
+Python<br>
+Flask<br>
+Flask-SQLAlchemy<br>
+Flask-SocketIO<br>
+PostgreSQL<br>
+SQLAlchemy<br>
+Frontend<br>
+HTML<br>
+CSS<br>
+JavaScript<br>
+Socket.IO Client<br>
+Data & Analytics<br>
+Pandas<br>
+NumPy<br>
+Other Tools<br>
+Eventlet<br>
+python-dotenv<br>
+psycopg2<br>
+📂 Project Structure<br>
 taskflow/
 │
 ├── app/
@@ -54,7 +54,7 @@ taskflow/
 ├── requirements.txt
 ├── run.py
 └── README.md
-⚙️ Setup Instructions
+⚙️ Setup Instructions<br>
 1. Clone the Repository
 git clone <your-repo-url>
 cd taskflow
@@ -116,26 +116,26 @@ counts  = np.array([completed, in_progress, pending])
 weights = np.array([1.0, 0.5, 0.0])
 
 score = np.dot(counts, weights) / total * 100
-🔒 Security Features
-Password hashing using Werkzeug
-Session-based authentication
-IDOR protection
-Input validation
-Protected API routes
-Environment-variable-based secrets
-🧠 Architecture Highlights
-Layered Backend Design
-Routes → Handle HTTP requests
-Services → Business logic
-Models → Database layer
-Utils → Reusable helpers
-Database Design
-PostgreSQL ENUM types
-Foreign key constraints
-Indexed queries
-Auto-updating timestamps via triggers
-Cascade delete relationships
-📸 Screenshots
+🔒 Security Features<br>
+Password hashing using Werkzeug<br>
+Session-based authentication<br>
+IDOR protection<br>
+Input validation<br>
+Protected API routes<br>
+Environment-variable-based secrets<br>
+🧠 Architecture Highlights<br>
+Layered Backend Design<br>
+Routes → Handle HTTP requests<br>
+Services → Business logic<br>
+Models → Database layer<br>
+Utils → Reusable helpers<br>
+Database Design<br>
+PostgreSQL ENUM types<br>
+Foreign key constraints<br>
+Indexed queries<br>
+Auto-updating timestamps via triggers<br>
+Cascade delete relationships<br>
+📸 Screenshots<br>
 ![alt text](image.png)
 ![alt text](image-1.png)
 ![alt text](image-2.png)
