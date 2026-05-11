@@ -1,41 +1,66 @@
-TaskFlow — Smart Task Management System
+<h1>TaskFlow — Smart Task Management System</h1>
 
-A full-stack task management application built with Flask, PostgreSQL, WebSockets, Pandas, and NumPy.
+<p>
+A full-stack task management application built with Flask, PostgreSQL,
+WebSockets, Pandas, and NumPy.
+</p>
 
-TaskFlow enables users to create, manage, update, and track tasks in real time with live dashboard updates and analytics.
+<p>
+TaskFlow enables users to create, manage, update, and track tasks in
+real time with live dashboard updates and analytics.
+</p>
 
-🚀 Features<br>
-User Authentication (Register / Login / Logout) <br>
-Secure session-based authentication<br>
-Task CRUD operations<br>
-Real-time task updates using WebSockets<br>
-PostgreSQL database integration<br>
-Analytics dashboard powered by Pandas + NumPy<br>
-Responsive dark-themed UI<br>
-RESTful API architecture<br>
-Input validation and error handling<br>
-Clean service-layer architecture<br>
-🛠️ Tech Stack<br>
-Backend<br>
-Python<br>
-Flask<br>
-Flask-SQLAlchemy<br>
-Flask-SocketIO<br>
-PostgreSQL<br>
-SQLAlchemy<br>
-Frontend<br>
-HTML<br>
-CSS<br>
-JavaScript<br>
-Socket.IO Client<br>
-Data & Analytics<br>
-Pandas<br>
-NumPy<br>
-Other Tools<br>
-Eventlet<br>
-python-dotenv<br>
-psycopg2<br>
-📂 Project Structure<br>
+<h2>🚀 Features</h2>
+
+<ul>
+  <li>User Authentication (Register / Login / Logout)</li>
+  <li>Secure session-based authentication</li>
+  <li>Task CRUD operations</li>
+  <li>Real-time task updates using WebSockets</li>
+  <li>PostgreSQL database integration</li>
+  <li>Analytics dashboard powered by Pandas + NumPy</li>
+  <li>Responsive dark-themed UI</li>
+  <li>RESTful API architecture</li>
+  <li>Input validation and error handling</li>
+  <li>Clean service-layer architecture</li>
+</ul>
+
+<h2>🛠️ Tech Stack</h2>
+
+<h3>Backend</h3>
+<ul>
+  <li>Python</li>
+  <li>Flask</li>
+  <li>Flask-SQLAlchemy</li>
+  <li>Flask-SocketIO</li>
+  <li>PostgreSQL</li>
+  <li>SQLAlchemy</li>
+</ul>
+
+<h3>Frontend</h3>
+<ul>
+  <li>HTML</li>
+  <li>CSS</li>
+  <li>JavaScript</li>
+  <li>Socket.IO Client</li>
+</ul>
+
+<h3>Data & Analytics</h3>
+<ul>
+  <li>Pandas</li>
+  <li>NumPy</li>
+</ul>
+
+<h3>Other Tools</h3>
+<ul>
+  <li>Eventlet</li>
+  <li>python-dotenv</li>
+  <li>psycopg2</li>
+</ul>
+
+<h2>📂 Project Structure</h2>
+
+<pre>
 taskflow/
 │
 ├── app/
@@ -54,119 +79,270 @@ taskflow/
 ├── requirements.txt
 ├── run.py
 └── README.md
-⚙️ Setup Instructions<br>
-1. Clone the Repository
-git clone <your-repo-url>
+</pre>
+
+<h2>⚙️ Setup Instructions</h2>
+
+<h3>1. Clone the Repository</h3>
+
+<pre>
+git clone &lt;your-repo-url&gt;
 cd taskflow
-2. Create Virtual Environment
-Windows
+</pre>
+
+<h3>2. Create Virtual Environment</h3>
+
+<h4>Windows</h4>
+
+<pre>
 python -m venv venv
 venv\Scripts\activate
-Mac/Linux
+</pre>
+
+<h4>Mac/Linux</h4>
+
+<pre>
 python3 -m venv venv
 source venv/bin/activate
-3. Install Dependencies
+</pre>
+
+<h3>3. Install Dependencies</h3>
+
+<pre>
 pip install -r requirements.txt
-4. Configure Environment Variables
+</pre>
 
-Create a .env file in the project root:
+<h3>4. Configure Environment Variables</h3>
 
+<p>Create a <code>.env</code> file in the project root:</p>
+
+<pre>
 SECRET_KEY=your_secret_key
 
 DATABASE_URL=postgresql://postgres:your_password@localhost:5432/flowdesk
 
 SOCKETIO_ASYNC_MODE=eventlet
-5. Create PostgreSQL Database
+</pre>
+
+<h3>5. Create PostgreSQL Database</h3>
+
+<pre>
 CREATE DATABASE flowdesk;
-6. Run Database Schema
+</pre>
+
+<h3>6. Run Database Schema</h3>
+
+<pre>
 psql -U postgres -d flowdesk -f schema.sql
-7. Start the Server
+</pre>
+
+<h3>7. Start the Server</h3>
+
+<pre>
 python run.py
+</pre>
 
-Application runs at:
+<p><strong>Application runs at:</strong></p>
 
+<pre>
 http://localhost:5000
-📡 API Endpoints
-Authentication
-Method	Endpoint	Description
-POST	/auth/api/register	Register user
-POST	/auth/api/login	Login user
-POST	/auth/api/logout	Logout user
-Tasks
-Method	Endpoint	Description
-GET	/api/tasks	Get all tasks
-GET	/api/tasks/<id>	Get single task
-POST	/api/tasks	Create task
-PUT	/api/tasks/<id>	Update task
-DELETE	/api/tasks/<id>	Delete task
-Analytics
-Method	Endpoint	Description
-GET	/api/analytics	Task analytics
-📊 Analytics Engine
+</pre>
 
-The analytics module uses Pandas and NumPy to generate:
+<h2>📡 API Endpoints</h2>
 
-Task completion statistics
-Priority distribution
-Daily task trends
-Productivity score
-Status breakdown percentages
-Productivity Score Formula
+<h3>Authentication</h3>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Method</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>/auth/api/register</td>
+    <td>Register user</td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>/auth/api/login</td>
+    <td>Login user</td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>/auth/api/logout</td>
+    <td>Logout user</td>
+  </tr>
+</table>
+
+<br>
+
+<h3>Tasks</h3>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Method</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td>/api/tasks</td>
+    <td>Get all tasks</td>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td>/api/tasks/&lt;id&gt;</td>
+    <td>Get single task</td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>/api/tasks</td>
+    <td>Create task</td>
+  </tr>
+  <tr>
+    <td>PUT</td>
+    <td>/api/tasks/&lt;id&gt;</td>
+    <td>Update task</td>
+  </tr>
+  <tr>
+    <td>DELETE</td>
+    <td>/api/tasks/&lt;id&gt;</td>
+    <td>Delete task</td>
+  </tr>
+</table>
+
+<br>
+
+<h3>Analytics</h3>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <tr>
+    <th>Method</th>
+    <th>Endpoint</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td>/api/analytics</td>
+    <td>Task analytics</td>
+  </tr>
+</table>
+
+<h2>📊 Analytics Engine</h2>
+
+<p>The analytics module uses Pandas and NumPy to generate:</p>
+
+<ul>
+  <li>Task completion statistics</li>
+  <li>Priority distribution</li>
+  <li>Daily task trends</li>
+  <li>Productivity score</li>
+  <li>Status breakdown percentages</li>
+</ul>
+
+<h3>Productivity Score Formula</h3>
+
+<pre>
 counts  = np.array([completed, in_progress, pending])
 weights = np.array([1.0, 0.5, 0.0])
 
 score = np.dot(counts, weights) / total * 100
-🔒 Security Features<br>
-Password hashing using Werkzeug<br>
-Session-based authentication<br>
-IDOR protection<br>
-Input validation<br>
-Protected API routes<br>
-Environment-variable-based secrets<br>
-🧠 Architecture Highlights<br>
-Layered Backend Design<br>
-Routes → Handle HTTP requests<br>
-Services → Business logic<br>
-Models → Database layer<br>
-Utils → Reusable helpers<br>
-Database Design<br>
-PostgreSQL ENUM types<br>
-Foreign key constraints<br>
-Indexed queries<br>
-Auto-updating timestamps via triggers<br>
-Cascade delete relationships<br>
-📸 Screenshots<br>
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
+</pre>
 
-🌐 Real-Time Updates
+<h2>🔒 Security Features</h2>
 
-FlowDesk uses Flask-SocketIO for real-time task synchronization.
+<ul>
+  <li>Password hashing using Werkzeug</li>
+  <li>Session-based authentication</li>
+  <li>IDOR protection</li>
+  <li>Input validation</li>
+  <li>Protected API routes</li>
+  <li>Environment-variable-based secrets</li>
+</ul>
 
-Whenever a task is:
+<h2>🧠 Architecture Highlights</h2>
 
-Created
-Updated
-Deleted
+<h3>Layered Backend Design</h3>
 
-all connected clients receive instant updates without refreshing the page.
+<ul>
+  <li>Routes → Handle HTTP requests</li>
+  <li>Services → Business logic</li>
+  <li>Models → Database layer</li>
+  <li>Utils → Reusable helpers</li>
+</ul>
 
-💡 Future Improvements
-JWT authentication
-Drag-and-drop tasks
-Due dates & reminders
-Docker deployment
-Unit testing
-Role-based access control
-Email notifications
-👨‍💻 Author
+<h3>Database Design</h3>
 
-Riza Mukhaddam Khaji
+<ul>
+  <li>PostgreSQL ENUM types</li>
+  <li>Foreign key constraints</li>
+  <li>Indexed queries</li>
+  <li>Auto-updating timestamps via triggers</li>
+  <li>Cascade delete relationships</li>
+</ul>
 
-Built as a full-stack internship project using Flask, PostgreSQL, WebSockets, Pandas, and NumPy.
+<h2>📸 Screenshots</h2>
 
-📜 License
+<p>
+<img src="image.png" width="800">
+</p>
 
+<p>
+<img src="image-1.png" width="800">
+</p>
+
+<p>
+<img src="image-2.png" width="800">
+</p>
+
+<p>
+<img src="image-3.png" width="800">
+</p>
+
+<h2>🌐 Real-Time Updates</h2>
+
+<p>
+TaskFlow uses Flask-SocketIO for real-time task synchronization.
+</p>
+
+<p>Whenever a task is:</p>
+
+<ul>
+  <li>Created</li>
+  <li>Updated</li>
+  <li>Deleted</li>
+</ul>
+
+<p>
+All connected clients receive instant updates without refreshing the page.
+</p>
+
+<h2>💡 Future Improvements</h2>
+
+<ul>
+  <li>JWT authentication</li>
+  <li>Drag-and-drop tasks</li>
+  <li>Due dates & reminders</li>
+  <li>Docker deployment</li>
+  <li>Unit testing</li>
+  <li>Role-based access control</li>
+  <li>Email notifications</li>
+</ul>
+
+<h2>👨‍💻 Author</h2>
+
+<p>
+<strong>Riza Mukhaddam Khaji</strong>
+</p>
+
+<p>
+Built as a full-stack internship project using Flask, PostgreSQL,
+WebSockets, Pandas, and NumPy.
+</p>
+
+<h2>📜 License</h2>
+
+<p>
 This project is for educational and internship evaluation purposes.
+</p>
