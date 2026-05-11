@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowDesk — Register</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center;
+           align-items: center; min-height: 100vh; margin: 0;
+           background: #0d0f14; color: #e8eaf0; }
+    .card { background: #141720; padding: 2rem; border-radius: 12px;
+            width: 360px; border: 1px solid #272c3d; }
+    h1 { margin-bottom: 1.5rem; font-size: 1.4rem; }
+    label { display: block; font-size: 0.8rem; color: #9ca3af;
+            margin-bottom: 0.3rem; text-transform: uppercase; }
+    input { width: 100%; padding: 0.65rem 0.9rem; border-radius: 8px;
+            border: 1px solid #272c3d; background: #1c2030; color: #e8eaf0;
+            font-size: 0.95rem; margin-bottom: 1rem; box-sizing: border-box; }
+    button { width: 100%; padding: 0.75rem; background: #f5a623; color: #0d0f14;
+             border: none; border-radius: 8px; font-size: 1rem;
+             font-weight: 600; cursor: pointer; }
+    button:hover { background: #f0b84a; }
+    .alert { padding: 0.65rem 0.9rem; border-radius: 8px; margin-bottom: 1rem;
+             display: none; font-size: 0.88rem; }
+    .alert.show { display: block; }
+    .alert-error   { background: rgba(240,82,82,0.15); color: #f05252; }
+    .alert-success { background: rgba(62,207,142,0.15); color: #3ecf8e; }
+    .switch { text-align: center; margin-top: 1rem; font-size: 0.88rem;
+              color: #6b7280; }
+    .switch a { color: #f5a623; }
+    .logo { color: #f5a623; font-size: 1.3rem; font-weight: 700;
+            margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">FlowDesk</div>
+  <h1>Create an account</h1>
+
+  <div id="alert" class="alert"></div>
+
+  <label for="username">Username</label>
+  <input type="text" id="username" placeholder="johndoe" />
+
+  <label for="email">Email</label>
+  <input type="email" id="email" placeholder="you@example.com" />
+
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="At least 6 characters" />
+
+  <button onclick="handleRegister()">Create account</button>
+
+  <p class="switch">
+    Already registered? <a href="/auth/login">Sign in</a>
+  </p>
+</div>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleRegister();
+  });
+
+  async function handleRegister() {
+    const username = document.getElementById('username').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!username || !email || !password) {
+      showAlert('Please fill in all fields.', 'error');
+      return;
+    }
+
+    try {
+      const response = await fetch('/auth/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showAlert('Account created! Redirecting to login...', 'success');
+        setTimeout(() => window.location.href = '/auth/login', 1200);
+      } else {
+        showAlert(data.message || 'Registration failed.', 'error');
+      }
+
+    } catch (err) {
+      showAlert('Network error. Is the server running?', 'error');
+    }
+  }
+
+  function showAlert(message, type) {
+    const el = document.getElementById('alert');
+    el.textContent = message;
+    el.className = 'alert alert-' + type + ' show';
+  }
+</script>
+</body>
+</html>

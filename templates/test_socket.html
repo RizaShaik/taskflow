@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FlowDesk — WebSocket Test</title>
+  <style>
+    body { font-family: monospace; background: #0d0f14; color: #e8eaf0;
+           padding: 2rem; max-width: 700px; margin: 0 auto; }
+    h1   { color: #f5a623; margin-bottom: 0.5rem; }
+    .sub { color: #6b7280; margin-bottom: 2rem; font-size: 0.9rem; }
+
+    .status-bar {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: #141720; border: 1px solid #272c3d;
+      padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1.5rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: #6b7280;
+           transition: all 0.3s; flex-shrink: 0; }
+    .dot.connected { background: #3ecf8e; box-shadow: 0 0 8px #3ecf8e; }
+    .dot.error      { background: #f05252; box-shadow: 0 0 8px #f05252; }
+    #status-text { font-size: 0.9rem; }
+
+    .log-box {
+      background: #141720; border: 1px solid #272c3d;
+      border-radius: 8px; padding: 1rem;
+      height: 300px; overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    .log-entry { padding: 0.3rem 0; border-bottom: 1px solid #1c2030;
+                 font-size: 0.85rem; }
+    .log-entry:last-child { border-bottom: none; }
+    .log-entry.info    { color: #60a5fa; }
+    .log-entry.success { color: #3ecf8e; }
+    .log-entry.event   { color: #f5a623; }
+    .log-entry.error   { color: #f05252; }
+
+    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    button {
+      padding: 0.6rem 1.2rem; border-radius: 8px; border: none;
+      cursor: pointer; font-family: monospace; font-size: 0.9rem;
+      font-weight: 600; transition: all 0.2s;
+    }
+    .btn-ping    { background: #f5a623; color: #0d0f14; }
+    .btn-create  { background: #3ecf8e; color: #0d0f14; }
+    .btn-clear   { background: #272c3d; color: #e8eaf0; }
+    button:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .event-counters {
+      display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .counter {
+      background: #141720; border: 1px solid #272c3d;
+      border-radius: 8px; padding: 0.6rem 1rem; font-size: 0.82rem;
+      min-width: 130px; text-align: center;
+    }
+    .counter .num { font-size: 1.5rem; color: #f5a623; display: block; }
+  </style>
+</head>
+<body>
+
+  <h1>⚡ WebSocket Test Console</h1>
+  <p class="sub">Open this page in two browser tabs to test real-time broadcast.</p>
+
+  <!-- Connection status -->
+  <div class="status-bar">
+    <div class="dot" id="dot"></div>
+    <span id="status-text">Connecting to server...</span>
+  </div>
+
+  <!-- Event counters -->
+  <div class="event-counters">
+    <div class="counter">
+      <span class="num" id="cnt-connected">0</span>
+      connected events
+    </div>
+    <div class="counter">
+      <span class="num" id="cnt-created">0</span>
+      task_created
+    </div>
+    <div class="counter">
+      <span class="num" id="cnt-updated">0</span>
+      task_updated
+    </div>
+    <div class="counter">
+      <span class="num" id="cnt-deleted">0</span>
+      task_deleted
+    </div>
+    <div class="counter">
+      <span class="num" id="cnt-pong">0</span>
+      pong_client
+    </div>
+  </div>
+
+  <!-- Event log -->
+  <div class="log-box" id="log"></div>
+
+  <!-- Buttons -->
+  <div class="btn-row">
+    <button class="btn-ping" onclick="sendPing()">📡 Ping Server</button>
+    <button class="btn-create" onclick="createTestTask()">➕ Create Test Task via API</button>
+    <button class="btn-clear" onclick="clearLog()">🗑 Clear Log</button>
+  </div>
+
+  <!-- Socket.IO client library -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+  <script>
+    // ── Counters ───────────────────────────────────────────────────────────
+    const counters = {
+      connected: 0, created: 0, updated: 0, deleted: 0, pong: 0
+    };
+
+    function incr(key) {
+      counters[key]++;
+      const map = {
+        connected: 'cnt-connected',
+        created:   'cnt-created',
+        updated:   'cnt-updated',
+        deleted:   'cnt-deleted',
+        pong:      'cnt-pong',
+      };
+      if (map[key]) document.getElementById(map[key]).textContent = counters[key];
+    }
+
+    // ── Logging ────────────────────────────────────────────────────────────
+    function log(message, type = 'info') {
+      const box   = document.getElementById('log');
+      const entry = document.createElement('div');
+      const time  = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${time}] ${message}`;
+      box.appendChild(entry);
+      // Auto-scroll to bottom
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = '';
+      log('Log cleared.', 'info');
+    }
+
+    // ── Status indicator ───────────────────────────────────────────────────
+    function setStatus(text, state) {
+      document.getElementById('status-text').textContent = text;
+      const dot = document.getElementById('dot');
+      dot.className = 'dot ' + (state || '');
+    }
+
+    // ── Socket.IO connection ───────────────────────────────────────────────
+    // io() with no arguments connects to the same host that served the page.
+    // transports: try WebSocket first, fall back to polling if needed.
+    const socket = io({
+      transports: ['websocket', 'polling']
+    });
+
+    // ── Connection events ──────────────────────────────────────────────────
+    socket.on('connect', () => {
+      setStatus(`Connected  (socket id: ${socket.id})`, 'connected');
+      log(`✅ Socket connected — ID: ${socket.id}`, 'success');
+    });
+
+    socket.on('disconnect', (reason) => {
+      setStatus('Disconnected — ' + reason, 'error');
+      log(`❌ Disconnected: ${reason}`, 'error');
+    });
+
+    socket.on('connect_error', (err) => {
+      setStatus('Connection error', 'error');
+      log(`⚠️  Connection error: ${err.message}`, 'error');
+    });
+
+    // ── Server confirmation event ──────────────────────────────────────────
+    socket.on('connected', (data) => {
+      incr('connected');
+      log(`📨 Server says: ${data.message}  (room: ${data.room})`, 'success');
+    });
+
+    // ── Task broadcast events ──────────────────────────────────────────────
+    // These fire when ANY client creates/updates/deletes a task.
+
+    socket.on('task_created', (task) => {
+      incr('created');
+      log(`🟢 task_created — ID: ${task.id} | "${task.title}" | ${task.priority} | ${task.status}`, 'event');
+    });
+
+    socket.on('task_updated', (task) => {
+      incr('updated');
+      log(`🟡 task_updated — ID: ${task.id} | "${task.title}" | status: ${task.status}`, 'event');
+    });
+
+    socket.on('task_deleted', (data) => {
+      incr('deleted');
+      log(`🔴 task_deleted — ID: ${data.id}`, 'event');
+    });
+
+    // ── Pong event ─────────────────────────────────────────────────────────
+    socket.on('pong_client', (data) => {
+      incr('pong');
+      log(`🏓 Pong received — server status: ${data.status}`, 'info');
+    });
+
+    // ── Actions ────────────────────────────────────────────────────────────
+    function sendPing() {
+      socket.emit('ping_server', { from: 'test_console' });
+      log('📡 Ping sent to server...', 'info');
+    }
+
+    async function createTestTask() {
+      log('Calling POST /api/tasks...', 'info');
+      try {
+        const res = await fetch('/api/tasks', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            title:       'WebSocket test task — ' + new Date().toLocaleTimeString(),
+            description: 'Created from the socket test console',
+            priority:    'high',
+            status:      'pending',
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          log(`✅ Task created via REST (id=${data.data.id}) — watch for task_created event above`, 'success');
+        } else {
+          log(`⚠️  API error: ${data.message}`, 'error');
+          log('   (Make sure you are logged in — open /auth/login first)', 'error');
+        }
+      } catch (err) {
+        log(`❌ Fetch error: ${err.message}`, 'error');
+      }
+    }
+
+    // Auto-ping every 30 seconds to keep connection alive
+    setInterval(() => {
+      if (socket.connected) {
+        socket.emit('ping_server', { from: 'keepalive' });
+      }
+    }, 30000);
+
+    log('Initialising Socket.IO connection...', 'info');
+  </script>
+
+</body>
+</html>

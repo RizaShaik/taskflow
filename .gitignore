@@ -1,0 +1,86 @@
+# =============================================================
+# FlowDesk — .gitignore
+# =============================================================
+# Files and folders that should NEVER be committed to Git.
+# Keeping these out protects secrets and reduces repo size.
+
+# ── Python ─────────────────────────────────────────────────────
+# Compiled bytecode — generated automatically by Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+
+# ── Virtual Environment ────────────────────────────────────────
+# The venv folder is huge (~100MB+) and reproducible
+# from requirements.txt — never commit it
+venv/
+env/
+ENV/
+.venv/
+.env.local
+
+# ── Environment Variables ──────────────────────────────────────
+# .env contains real secrets (DB password, SECRET_KEY)
+# .env.example is safe to commit — it has fake values only
+.env
+
+# ── Database ───────────────────────────────────────────────────
+# Local database files (SQLite) — we use PostgreSQL but just in case
+*.db
+*.sqlite
+*.sqlite3
+
+# ── Testing ────────────────────────────────────────────────────
+# Temporary test files we created during development
+test_validators.py
+test_services.py
+test_analytics.py
+cookies.txt
+
+# pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── IDE & Editor ───────────────────────────────────────────────
+# VS Code workspace settings
+.vscode/
+.idea/
+
+# macOS metadata files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+logs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Flask ──────────────────────────────────────────────────────
+instance/
+.webassets-cache
+
+# ── Uploads (if you add file upload feature later) ─────────────
+uploads/
+static/uploads/
+
+# ── Node (if you add npm tools later) ──────────────────────────
+node_modules/
+npm-debug.log*
